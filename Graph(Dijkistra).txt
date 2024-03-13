@@ -1,0 +1,155 @@
+HEADER FILE:
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+        int adj;
+        int cost;
+        struct node *next;
+};
+typedef struct node* list;
+struct node1
+{
+        int nov;
+        list *array;
+};
+typedef struct node1* graph;
+struct node2
+{
+        int known;
+        int dist;
+        int path;
+};
+typedef struct node2* table;
+graph ginit(int n,graph g);
+table tinit(int s,graph g,table t);
+void dijkstra(table t,graph g);
+void display(table t,graph g);
+void readgraph(graph g);
+
+APPLICATION FILE:
+
+#include"Header.h"
+int main()
+{
+        int n,s;
+        graph g;
+     	printf("Enter No of Vertices :\n");
+        scanf("%d",&n);
+        g=(graph) malloc(sizeof(graph));
+        g=ginit(n,g);
+        readgraph(g);
+        printf("Enter Source Node :\n");
+        scanf("%d",&s);
+        table t;
+        t=(table) malloc(sizeof(table)*(n+1));
+        t=tinit(s,g,t);
+        dijkstra(t,g);
+        display(t,g);
+        return 0;
+}
+
+IMPLEMENTATION FILE:
+
+#include"Header.h"
+graph ginit(int n,graph g)
+{
+        int i;
+        g->nov=n;
+        g->array=(list*) malloc((n+1)*sizeof(list));
+        for(i=1;i<=n;i++)
+        {
+                g->array[i]=(list) malloc(sizeof(struct node));
+                g->array[i]->next=NULL;
+        }
+        return g;
+}
+void readgraph(graph g)
+{
+        list t,temp;
+        int a,c,i,ch;
+        for(i=1;i<=g->nov;i++)
+        {
+                do
+                {
+                        printf("To Enter Adjacent Vertex for Vertex %d Enter 1 :\n",i);
+                        scanf("%d",&ch);
+                        if(ch==1)
+                        {
+                                printf("Enter Adjacent Vertex and Cost :\n");
+                                scanf("%d%d",&a,&c);
+                                temp=(list) malloc(sizeof(struct node));
+                                temp->adj=a;
+                                temp->cost=c;
+                                t=g->array[i];
+                                temp->next=t->next;
+                                t->next=temp;
+                        }
+                }while(ch==1);
+        }
+}
+table tinit(int s,graph g,table t)
+{
+        int i,n;
+        n=g->nov;
+        for(i=1;i<=g->nov;i++)
+        {
+                t[i].known=0;
+                t[i].dist=9999;
+                t[i].path=0;
+        }
+        t[s].dist=0;
+        return t;
+}
+int dista(table t,int n)
+{
+        int i,a=9999,b;
+        for(i=1;i<=n;i++)
+        {
+                if(t[i].known==0)
+                {
+                        if(t[i].dist<a)
+                        {
+                                b=i;
+                                a=t[i].dist;
+                        }
+                }
+        }
+        return b;
+}
+void display(table t,graph g)
+{
+        int i;
+        printf("VERTEX KNOWN DISTANCE PATH\n");
+        for(i=1;i<=g->nov;i++)
+        {
+                printf("%d\t%d\t%d\t%d\n",i,t[i].known,t[i].dist,t[i].path);
+        }
+}
+void dijkstra(table t,graph g)
+{
+        int i,v,w;
+        for(i=1;i<=g->nov;i++)
+        {
+                v=dista(t,g->nov);
+                t[v].known=1;
+                list l;
+                l=g->array[v]->next;
+                while(l!=NULL)
+                {
+                        w=l->adj;
+                        if(t[w].known!=1)
+                        {
+
+                                if((t[v].dist+l->cost)<t[w].dist)
+                                {
+                                        t[w].dist=t[v].dist+l->cost;
+                                        t[w].path=v;
+                                }
+                        }
+                        l=l->next;
+                }
+        }
+}
+

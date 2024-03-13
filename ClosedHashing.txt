@@ -1,0 +1,73 @@
+HEADER FILE:
+
+#include <stdio.h>
+#include <stdlib.h>
+int tsize,n;
+int hasht(int key);
+void insert(int arr[],int hash[],int tsize);
+
+IMPLEMENTATION FILE:
+
+#include"Header2.h"
+int hasht(int key)
+{
+	int i ;
+	i = key%tsize ;
+	return i;
+}
+
+int linearprobe(int key)
+{
+	int i ;
+	i = (key+1)%tsize ;
+	return i ;
+}
+
+void insert(int arr[],int hash[],int tsize)
+{
+	int i,k,key;
+	for (i=0; i<tsize; i++)
+		hash[i]=-1;
+
+	for(k=0; k<n; k++)
+	{
+		key=arr[k] ;
+		i = hasht(key);
+		while (hash[i]!=-1)
+		{
+			i = linearprobe(i);
+		}
+		hash[i]=key ;
+	}
+	printf("\nThe elements in the array are: ");
+	for (i=0; i<tsize; i++)
+	{
+		printf("\n  Element at position %d: %d",i,hash[i]);
+	}
+	printf("\n");
+}
+
+APPLICATION FILE:
+
+#include"Header2.h"
+int main()
+{
+	int key,arr[20],hash[20],i,s,op,j,k ;
+	printf ("Enter the size of the hash table:  ");
+	scanf ("%d",&tsize);
+
+	printf ("\nEnter the number of elements: ");
+	scanf ("%d",&n);
+
+	for (i=0; i<tsize; i++)
+		hash[i]=-1 ;
+
+	printf ("Enter Elements: ");
+	for (i=0; i<n; i++)
+
+		scanf("%d",&arr[i]);
+		
+	insert(arr,hash,tsize);
+	return 0;
+}
+

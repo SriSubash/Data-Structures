@@ -1,0 +1,133 @@
+HEADER FILE:
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+	int *data;
+	int size;
+	int capacity;
+};
+typedef struct node *pq;
+void display(pq q);
+void deletemax(pq q);
+pq insert(int x,pq q);
+void decreasekey(pq q);
+
+IMPLEMENTATION FILE:
+
+#include"Header.h"
+pq insert(int x,pq q)
+{
+	int i;
+	if(q->size==q->capacity-1)
+		printf("Insertion Not Possible.\n\n");
+	else
+	{
+		q->size++;
+		for(i=q->size;q->data[i/2]<x;i=i/2)
+			q->data[i]=q->data[i/2];
+		q->data[i]=x;
+	}
+	return q;
+}
+void deletemax(pq q)
+{
+	int i,last,min,child;
+	if(q->size==0)
+	{
+		printf("Heap Empty.\n\n");
+		return;
+	}
+	min=q->data[1];
+	last=q->data[q->size];
+	q->size--;
+	for(i=1;2*i<q->size;i=child)
+	{
+		child=2*i;
+		if(child!=q->size && q->data[child+1]>q->data[child])
+			child=child+1;
+		if(last<q->data[child])
+			q->data[i]=q->data[child];
+		else
+			break;
+	}
+	q->data[i]=last;
+	printf("The Deleted Min Element is %d\n\n",min);
+}
+void decreasekey(pq q)
+{
+	int x,pos;
+	if(q->size!=0)
+	{
+		printf("Enter the Element to Delete:\n");
+		scanf("%d",&x);
+		for(pos=1;pos<=q->size;pos++)
+		{
+			if(q->data[pos]==x)
+				break;
+		}
+		q->size--;
+		q->data[pos]=q->data[1]-1;
+		deletemax(q);
+	}
+	else
+		printf("Heap is Empty.\n\n");
+}
+void display(pq q)
+{
+	if(q->size!=0)
+	{
+		int i;
+		printf("The Elements are\n");
+		for(i=1;i<=q->size;i++)
+			printf("%d\n",q->data[i]);
+	}
+	else
+		printf("Heap is Empty.\n");
+		printf("\n");
+}
+
+APPLICATION FILE:
+
+#include"Header.h"
+int main()
+{
+	pq q;
+	int m,ch,x,pos;
+	printf("Enter the Capacity:\n");
+	scanf("%d",&m);
+	q=(pq)malloc(sizeof(struct node));
+	q->data=(int*)malloc(m*sizeof(int));
+	q->size=0;
+	q->capacity=m;
+	q->data[0]=999;
+
+	do
+	{
+		printf("**************************************\n\n");
+		printf("ARRAY IMPLEMENTATION OF BINARY HEAP.\n\n");
+		printf("**************************************\n\n");
+		printf("1->INSERT.\n2->DELETE.\n3->DECREASEKEY.\n4->DISPLAY.\n5->EXIT\n\n");
+		printf("**************************************\n\n");
+		printf("Enter your Choice:\n");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:printf("Enter the Element to Insert:\n");
+					scanf("%d",&x);
+					q=insert(x,q);
+					break;
+			case 2:deletemax(q);
+					break;
+			case 3:decreasekey(q);
+					break;
+			case 4:display(q);
+					break;
+			case 5:break;
+			default:printf("Invalid Input\n\n");
+			}	
+	}while(ch!=5);
+	return 0;
+}
+

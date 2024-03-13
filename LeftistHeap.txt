@@ -1,0 +1,180 @@
+HEADER FILE:
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+        int data;
+        struct node *left;
+        struct node *right;
+        int npl;
+};
+typedef struct node *lh;
+lh insert(int x,lh h1);
+lh merge(lh h1,lh h2);
+static lh merge1(lh h1,lh h2);
+lh delete(lh h1);
+int npl(lh h1);
+void swapchild(lh h1);
+//lh search(int x,lh t);
+void display(lh t);
+void preorder(lh t);
+void inorder(lh t);
+void postorder(lh t);
+
+IMPLEMENTATION FILE:
+
+#include"Header.h"
+lh insert(int x,lh h1)
+{
+        lh temp=(lh)malloc(sizeof(struct node));
+        temp->data=x;
+        temp->left=temp->right=NULL;
+        temp->npl=0;
+        return merge(temp,h1);
+}
+lh merge(lh h1,lh h2)
+{
+        if(h1==NULL)
+                return h2;
+        if(h2==NULL)
+                return h1;
+        if(h1->data<h2->data)
+                return merge1(h1,h2);
+        else
+                return merge1(h2,h1);
+}
+static lh merge1(lh h1,lh h2)
+{
+        if(h1->left==NULL)
+                h1->left=h2;
+        else
+        {
+                h1->right=merge(h1->right,h2);
+                h1->left->npl=npl(h1->left);
+                h1->right->npl=npl(h1->right);
+                if(h1->left->npl<h1->right->npl)
+                        swapchild(h1);
+                h1->npl=h1->right->npl+1;
+        }
+        return h1;
+}
+lh delete(lh h1)
+{
+        int x;
+        x=h1->data;
+        printf("The Deleted Element is %d\n\n",x);
+        return merge(h1->left,h1->right);
+}
+int npl(lh h1)
+{
+        if(h1==NULL)
+                return -1;
+        else
+                return h1->npl;
+}
+void swapchild(lh h1)
+{
+        lh temp;
+        temp=h1->right;
+        h1->right=h1->left;
+        h1->left=temp;
+}
+/*lh search(int x,lh t)
+{
+        if(t==NULL)
+                printf("Element Not Found.\n\n");
+        else
+        {
+                if(x<t->data)
+                        return search(x,t->left);
+                if(x>t->data)
+                        return search(x,t->right);
+                else if(x==t->data)
+                        printf("Element is Present.\n\n");
+        }
+}*/
+void display(lh t)
+{
+        int ch;
+        printf("***********************************\n\n");
+        printf("Select the Order for Printing the values:\n\n");
+        printf("1->PREORDER.\n2->INORDER.\n3->POSTORDER.\n\n");
+        printf("***********************************\n\n");
+        printf("Enter your choice:\n");
+        scanf("%d",&ch);
+        if(t!=NULL)
+        {
+                switch(ch)
+                {
+                        case 1: preorder(t);printf("\n");break;
+                        case 2: inorder(t);printf("\n");break;
+                        case 3: postorder(t);printf("\n");break;
+                        default:printf("Invalid choice.\n\n");break;
+                }
+        }
+        else
+        {
+                        printf("Tree is Empty.\n\n");
+        }
+}
+void preorder(lh t)
+{
+        if(t!=NULL)
+        {
+                printf("%d\t",t->data);
+                preorder(t->left);
+                preorder(t->right);
+        }
+}
+void inorder(lh t)
+{
+        if(t!=NULL)
+        {
+                inorder(t->left);
+                printf("%d\t",t->data);
+                inorder(t->right);
+        }
+}
+void postorder(lh t)
+{
+        if(t!=NULL)
+        {
+                postorder(t->left);
+                postorder(t->right);
+                printf("%d\t",t->data);
+        }
+}
+
+APLLICATION FILE:
+
+#include"Header.h"
+int main()
+{
+        lh h;
+        int x,ch;
+        do
+        {
+                printf("******************************************\n\n");
+                printf("LINKED LIST IMPLEMENTATION OF LEFTIST HEAP\n\n");
+                printf("******************************************\n\n");
+                printf("1->INSERT.\n2->DELETEMIN.\n3->DISPLAY.\n4->EXIT.\n\n");
+                printf("******************************************\n\n");
+                printf("Enter Your Choice:\n");
+                scanf("%d",&ch);
+                switch(ch)
+                {
+                        case 1:printf("Enter the Element to Insert.\n");
+                                scanf("%d",&x);
+                                h=insert(x,h);
+                                break;
+                        case 2:h=delete(h);
+                                break;
+                        case 3:display(h);
+                                break;
+                        case 4:break;
+                }
+        }while(ch!=4);
+        return 0;
+}
+

@@ -1,0 +1,218 @@
+HEADER FILE:
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+        int data;
+        struct node *left;
+        struct node *right;
+};
+typedef struct node *bst;
+bst insert(int x,bst t);
+bst delete(int x,bst t);
+bst search(int x,bst t);
+void display(bst t);
+void preorder(bst t);
+void inorder(bst t);
+void postorder(bst t);
+bst findmin(bst t);
+bst findmax(bst t);
+
+APPLICATION FILE:
+
+#include"Header.h"
+int main()
+{
+        bst t,min,max;
+        int ch,x;
+        do
+        {
+                printf("***********************************\n\n");
+                printf("LINKED LIST IMPLEMENTATION OF TREE.\n\n");
+                printf("***********************************\n\n");
+                printf("1->INSERT.\n2->DELETE.\n3->SEARCH.\n4->DISPLAY.\n5->FINDMIN.\n6-.FINDMAX.\n7->EXIT.\n\n");
+                printf("***********************************\n\n");
+                printf("Enter you choice:\n");
+                scanf("%d",&ch);
+                switch(ch)
+                {
+                        case 1: printf("Enter the Element to Insert:\n");
+                                scanf("%d",&x);
+                                t=insert(x,t);
+                                break;
+                        case 2: printf("Enter the Element to Delete:\n");
+                                scanf("%d",&x);
+                                t=delete(x,t);
+                                break;
+                        case 3: if(t!=NULL)
+                                {
+                                        printf("Enter the Element to Search:\n");
+                                        scanf("%d",&x);
+                                        search(x,t);
+                                }
+                                else
+                                {
+                                        printf("Tree is Empty.\n\n");
+                                }
+                                break;
+                        case 4: display(t);
+                                break;
+                        case 5: min=findmin(t);
+                                if(min!=NULL)
+                                        printf("The Smallest Element is %d\n\n",min->data);
+                                else
+                                        printf("Element not Found.\n\n");
+                                break;
+                        case 6: max=findmax(t);
+                                if(max!=NULL)
+                                        printf("The Largest Element is %d\n\n",max->data);
+                                else
+                                        printf("Element not Found.\n\n");
+                                break;
+                        case 7: break;
+                        default:printf("Invalid Choice.\n\n");
+                                break;
+                }
+        }while(ch!=7);
+        return 0;
+}
+
+IMPLEMENTATION FILE:
+
+#include"Header.h"
+bst insert(int x,bst t)
+{
+        if(t==NULL)
+        {
+                t=(bst)malloc(sizeof(struct node));
+                t->left=t->right=NULL;
+                t->data=x;
+        }
+        else if(x<t->data)
+        {
+                t->left=insert(x,t->left);
+        }
+        else if(x>t->data)
+        {
+                t->right=insert(x,t->right);
+        }
+        return t;
+}
+bst delete(int x,bst t)
+{
+        bst temp;
+        if(t==NULL)
+        {
+                printf("Tree is Empty or Element not Found.\n\n");
+        }
+        else if(x<t->data)
+        {
+                t->left=delete(x,t->left);
+        }
+        else if(x>t->data)
+        {
+                t->right=delete(x,t->right);
+        }
+        else if(t->left&&t->right)
+        {
+                temp=findmin(t->right);
+                t->data=temp->data;
+                t->right=delete(temp->data,t->right);
+        }
+        else
+        {
+                temp=t;
+                if(t->left==NULL)
+                        t=t->right;
+                else if(t->right==NULL)
+                        t=t->left;
+                free(temp);
+                printf("Element is Deleted.\n\n");
+        }
+        return t;
+}
+bst findmin(bst t)
+{
+        if(t==NULL)
+                return NULL;
+        else if(t->left==NULL)
+                return t;
+        else
+                return findmin(t->left);
+}
+bst findmax(bst t)
+{
+        if(t==NULL)
+                return NULL;
+        else if(t->right==NULL)
+                return t;
+        else
+                return findmax(t->right);
+}
+bst search(int x,bst t)
+{
+        if(t==NULL)
+                printf("Element Not Found.\n\n");
+        else
+        {
+                if(x<t->data)
+                        return search(x,t->left);
+                if(x>t->data)
+                        return search(x,t->right);
+                else if(x==t->data)
+                        printf("Element is Present.\n\n");
+        }
+}
+void display(bst t)
+{
+        int ch;
+        printf("***********************************\n\n");
+        printf("Select the Order for Printing the values:\n\n");
+        printf("1->PREORDER.\n2->INORDER.\n3->POSTORDER.\n\n");
+        printf("***********************************\n\n");
+        printf("Enter your choice:\n");
+        scanf("%d",&ch);
+        if(t!=NULL)
+        {
+                switch(ch)
+                {
+                        case 1: preorder(t);break;
+                        case 2: inorder(t);break;
+                        case 3: postorder(t);break;
+                        default:printf("Invalid choice.\n\n");break;
+                }
+        }
+        else
+        {
+                        printf("Tree is Empty.\n\n");
+        }
+}
+void preorder(bst t)
+{
+        if(t!=NULL)
+        {
+                printf("%d\n",t->data);
+                preorder(t->left);
+                preorder(t->right);
+        }
+}
+void inorder(bst t)
+{
+        if(t!=NULL)
+        {
+                inorder(t->left);
+                printf("%d\n",t->data);
+                inorder(t->right);
+        }
+}
+void postorder(bst t)
+{
+        if(t!=NULL)
+        {
+                postorder(t->left);
+                postorder(t->right);
+                printf("%d\n",t->data);
+        }
+}
+
