@@ -7,10 +7,6 @@ Welcome to the C Data Structures repository! This project contains implementatio
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Data Structures Implemented](#data-structures-implemented)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
 
 ## Features
 
@@ -38,15 +34,23 @@ To get started with this project, you will need to have a C compiler installed o
    ```bash
    cd data-structures
 
-### Data Structures Implemented
+## Data Structures Implemented
+* Array
 * Linked List
    - Singly Linked List
-Doubly Linked List
-Stack
-Queue
-Binary Tree
-Binary Search Tree
-Hash Table
-Graph
-Adjacency List
-Adjacency Matrix
+   - Doubly Linked List
+* Stack
+* Queue
+* Trees
+   - Binary Search Tree
+   - AVL Tree
+   - Splay Tree
+   - Red Black Tree 
+* Hashing 
+   - Open Hashing
+   - Closed Hashing
+* Heap
+   - Binay Heap
+   - Leftist Heap
+* Graph
+   - Dijkistra
