@@ -40,7 +40,7 @@ To get started with this project, you will need to have a C compiler installed o
 
 ### Data Structures Implemented
 * Linked List
-** Singly Linked List
+   - Singly Linked List
 Doubly Linked List
 Stack
 Queue
